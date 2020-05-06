@@ -8,4 +8,4 @@ Generate a random sample voter database, data.txt.
 Voter authentication, casting votes and vote encryption and storage into the database.
 
 # counting
-Vote database decryption, tallying and publishing election results and statistics.
+Voter database decryption, tallying and publishing election results and statistics.
