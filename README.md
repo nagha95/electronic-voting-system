@@ -12,4 +12,5 @@ Voter database decryption, tallying votes and publishing election results and st
 
 ## Documentation
 Docs: https://docs.google.com/document/d/1WZK5UvwBtpY6q1ADkBtUVcVw-8VmziWp2FoU7ekU98o/edit?usp=sharing
+
 Slides: https://docs.google.com/presentation/d/1a7DGs2rRy9wmdj7Q3fQr_7ZeLZJr4lBssK-iqndABfk/edit?usp=sharing
