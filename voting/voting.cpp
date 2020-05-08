@@ -97,6 +97,7 @@ int selectCandidate()
     return n;
 }
 
+/*select a policy*/
 int selectPolicy()
 {
     cout << "What policy was the most important factor in your vote?" << endl
@@ -123,6 +124,32 @@ int selectPolicy()
     return n;
 }
 
+/*confirm a vote*/
+bool confirm(int candidate, int policy)
+{
+    char conf;
+
+    cout << "\nYour choices: " << endl
+         << "Candidate: " << c[candidate].Name() << endl
+         << "Policy: " << p[policy] << endl
+         << "\nAre you sure you wish to submit your vote?" << endl;
+    
+    do
+    {
+        cout << "Enter Y to confirm or N to cancel: ";
+        
+        cin >> conf;
+        conf = toupper(conf);
+        
+        if (conf == 'Y')
+        return true;
+        else if (conf == 'N')
+        return false;
+
+    } while (conf != 'Y' && conf != 'N');
+}
+
+/*submit a vote*/
 void submit(int voter, int candidate, int policy)
 {
     //set voter as voted and update memory
@@ -138,6 +165,7 @@ void submit(int voter, int candidate, int policy)
     m[voter][8] = v[voter].Policy();
 }
 
+/*print a vote*/
 void print(int voter)
 {
     cout << "\nYour ballot: " << endl
@@ -186,16 +214,24 @@ int main()
 
     while (voting)
     {
-        //enter and update ID
-        id = enter(id);
+        int voter, candidate, policy;
 
-        //check voter eligibility
-        while (!eligible(id))
-        id = enter(id);
+        do
+        {
+            //enter and update ID
+            id = enter(id);
 
-        int voter = id - 11000;
-        int candidate = selectCandidate() - 1;
-        int policy = selectPolicy() - 1;
+            //check voter eligibility
+            while (!eligible(id))
+            id = enter(id);
+
+            voter = id - 11000;
+        
+            candidate = selectCandidate() - 1;
+            policy    = selectPolicy() - 1;
+            
+          //verify and confirm choices
+        } while(!confirm(candidate, policy));
 
         //submit ballot
         submit(voter, candidate, policy);
