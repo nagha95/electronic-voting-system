@@ -9,9 +9,9 @@ using namespace std;
 
 bool voting;                   //voting open or closed
 
-const int CANDIDATES = 4;      //amount of candidates
-const int VOTERS = 1000;       //amount of voters
-const int POLICIES = 10;       //amount of policies
+const unsigned short int CANDIDATES = 4;      //amount of candidates
+const unsigned short int VOTERS = 1000;       //amount of voters
+const unsigned short int POLICIES = 10;       //amount of policies
 
 //define candidates
 Candidate c[CANDIDATES] =
@@ -41,10 +41,10 @@ string p[POLICIES] =
 };
 
 //allocate memory
-string m[VOTERS][9];
+string m[VOTERS][10];
 
 /*check if an ID is eligible*/
-bool eligible(int id)
+bool eligible(int id, string password)
 {
     //check voter database
     for (int i = 0; i < VOTERS; i++)
@@ -52,14 +52,23 @@ bool eligible(int id)
         //check if ID is in database
         if (v[i].ID() == id)
         {
-            //check if voted
-            if (v[i].Voted() == "Yes")
+            //check if password is correct
+            if (v[i].Password() == password)
             {
-                cout << "You have already cast your vote.\n" << endl;
+                //check if voted
+                if (v[i].Voted() == "Yes")
+                {
+                    cout << "You have already cast your vote.\n" << endl;
+                    return false;
+                }
+
+                return true;
+            }
+            else
+            {
+                cout << "Password is incorrect.\n" << endl;
                 return false;
             }
-
-            return true;
         }
     }
 
@@ -70,17 +79,25 @@ bool eligible(int id)
 /*enter an ID*/
 int enter(int id)
 {
-    cout << "Enter your ID: ";
+    cout << "\nEnter your ID: ";
     cin >> id;
-    cout << endl;
 
     return id;
+}
+
+/*enter a password*/
+string enter(string password)
+{
+    cout << "Enter your password: ";
+    cin >> password;
+
+    return password;
 }
 
 /*select a candidate*/
 int selectCandidate()
 {
-    cout << "Select your candidate: " << endl;
+    cout << "\nSelect your candidate: " << endl;
 
     for (int i = 0; i < CANDIDATES; i++)
     cout << i + 1 << ". " << c[i].Name() << endl;
@@ -100,7 +117,7 @@ int selectCandidate()
 /*select a policy*/
 int selectPolicy()
 {
-    cout << "What policy was the most important factor in your vote?" << endl
+    cout << "\nWhat policy was the most important factor in your vote?" << endl
          << "1. Criminal Justice" << endl
          << "2. Gun Control" << endl
          << "3. Economy" << endl
@@ -147,6 +164,8 @@ bool confirm(int candidate, int policy)
         return false;
 
     } while (conf != 'Y' && conf != 'N');
+
+    return false;
 }
 
 /*submit a vote*/
@@ -154,15 +173,15 @@ void submit(int voter, int candidate, int policy)
 {
     //set voter as voted and update memory
     v[voter].Voted("Yes");
-    m[voter][6] = v[voter].Voted();
+    m[voter][7] = v[voter].Voted();
     
     //set voter candidate choice and update memory
     v[voter].Candidate(c[candidate].Name());
-    m[voter][7] = v[voter].Candidate();
+    m[voter][8] = v[voter].Candidate();
     
     //set voter policy choice and update memory
     v[voter].Policy(p[policy]);
-    m[voter][8] = v[voter].Policy();
+    m[voter][9] = v[voter].Policy();
 }
 
 /*print a vote*/
@@ -178,7 +197,6 @@ void print(int voter)
 int main()
 {
     voting = true;             //voting is open
-    int id;                    //voter ID
 
     ifstream r;                //read from data
     ofstream w;                //write to data
@@ -190,14 +208,15 @@ int main()
         //read data from storage into memory
         for (int i = 0; i < VOTERS; i++)
         {
-            for (int j = 0; j < 9; j++)
+            for (int j = 0; j < 10; j++)
             r >> m[i][j];
         }
     }
     else
     {
-        cout << "Data read error." << endl;
-        exit(1);
+        cout << "Unable to open and read from data file." << endl
+             << "Please make sure the file is in the folder.";
+        while (1);
     }
 
     r.close();
@@ -205,25 +224,32 @@ int main()
     //load data from memory to voter objects
     for (int i = 0; i < VOTERS; i++)
     {
-        v[i].load(stoi(m[i][0]), m[i][1], m[i][2],
-                       m[i][3] , m[i][4], m[i][5],
-                       m[i][6] , m[i][7], m[i][8]);
+        v[i].load(stoi(m[i][0]),
+                       m[i][1], m[i][2], m[i][3],
+                       m[i][4], m[i][5], m[i][6],
+                       m[i][7], m[i][8], m[i][9]);
     }
 
     cout << "Welcome to the 2020 Election." << endl;
 
     while (voting)
     {
+        int id = 0;                     //voter ID
+        string password;                //voter password
         int voter, candidate, policy;
 
         do
         {
-            //enter and update ID
+            //enter ID and password
             id = enter(id);
+            password = enter(password);
 
             //check voter eligibility
-            while (!eligible(id))
-            id = enter(id);
+            while (!eligible(id, password))
+            {
+                id = enter(id);
+                password = enter(password);
+            }
 
             voter = id - 11000;
         
@@ -243,7 +269,7 @@ int main()
             //write data from memory into storage
              for (int i = 0; i < VOTERS; i++)
              {
-                 for (int j = 0; j < 9; j++)
+                 for (int j = 0; j < 10; j++)
                  w << m[i][j] << " ";
                 
                 w << endl;
@@ -251,8 +277,9 @@ int main()
         }
         else
         {
-            cout << "Data write error." << endl;
-            exit(1);
+            cout << "Unable to open and write to data file." << endl
+                 << "Please make sure the file is in the folder.";
+            while (1);
         }
         
         w.close();

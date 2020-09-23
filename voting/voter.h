@@ -7,6 +7,7 @@ class Voter
     private:
 
     int id;             //voter ID
+    string password;    //voter password
     string age;         //voter age
     string gender;      //voter gender
     string race;        //voter race
@@ -22,17 +23,20 @@ class Voter
     /*constructor*/
     Voter()
     {
-        load(0, "None", "None",
+        load(0,
+             "None", "None", "None",
              "None", "None", "None", 
              "No", "None", "None");
     }
 
     /*loads database information for a voter*/
-    void load(int id, string age, string gender,
-          string race, string education, string job, 
-          string voted, string candidate, string policy)
+    void load(int id,
+              string password, string age, string gender,
+              string race, string education, string job, 
+              string voted, string candidate, string policy)
     {
         this->id = id;
+        this->password = password;
         this->age = age;
         this->gender = gender;
         this->race = race;
@@ -65,6 +69,12 @@ class Voter
     int ID()
     {
         return id;
+    }
+
+    /*returns the voter password*/
+    string Password()
+    {
+        return password;
     }
 
     /*returns the voter age*/

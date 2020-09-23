@@ -7,14 +7,15 @@
 #include "candidate.h"
 using namespace std;
 
-bool voting;                   //voting open or closed
+bool counting;                 //counting open or closed
 
-const int CANDIDATES = 4;      //amount of candidates
-const int VOTERS = 1000;       //amount of voters
+const unsigned short int CANDIDATES = 4;      //amount of candidates
+const unsigned short int VOTERS = 1000;       //amount of voters
 
 int votes = 0;                 //amount of votes
 
-string id, age, gender,
+string id,
+       password, age, gender,
        race, education, job,
        voted, candidate, policy;
 
@@ -69,7 +70,7 @@ double generalPercentage(int x)
 }
 
 /*calculate and display election results*/
-void generalResults()
+bool generalResults()
 {
     cout.precision(4);
     cout << "Election Results: \n" << endl;
@@ -77,7 +78,7 @@ void generalResults()
     if (votes == 0)
     {
         cout << "No votes have been cast." << endl;
-        return;
+        return false;
     }
 
     //tally votes
@@ -89,9 +90,9 @@ void generalResults()
              << endl;
     }
 
-    cout << "\nGeneral election statistics: \n" << endl;
+    cout << "\n\nGeneral election statistics: " << endl;
     
-    cout << "Votes: " << votes << endl
+    cout << "\nVotes: " << votes << endl
          << "Turnout: " << (votes * 1.0 / VOTERS) * 100 << "%" << endl;
 
     cout << "\nRepublican Party: " << generalPercentage(republican)
@@ -138,6 +139,8 @@ void generalResults()
          << "Immigration: "      << generalPercentage(imm) << "%" << endl
          << "Healthcare: "       << generalPercentage(hc) << "%" << endl
          << "Abortion: "         << generalPercentage(ab) << "%" << endl;
+
+    return true;
 }
 
 /*calculate and display election results*/
@@ -145,7 +148,7 @@ void candidateResults()
 {
     cout.precision(4);
 
-    cout << "\nCandidate statistics: \n" << endl;
+    cout << "\n\nCandidate statistics: " << endl;
 
     for (int i = 0; i < CANDIDATES; i++)
     {
@@ -154,7 +157,7 @@ void candidateResults()
             continue;
         }
 
-        cout << c[i].Name() << ": " << endl;
+        cout << "\n------ " << c[i].Name() << " ------" << endl;
 
         cout << "\nAge groups: " << endl
              << "18-24: " << (c[i].age1824 * 100.0) / c[i].Votes() << "%" << endl
@@ -200,9 +203,9 @@ void candidateResults()
 
 int main()
 {
-    voting = false;
+    counting = true;
 
-    while(!voting)
+    while(counting)
     {
         ifstream r;             
 
@@ -210,7 +213,7 @@ int main()
 
         if (r.is_open())
         {
-            while (r >> id >> age >> gender
+            while (r >> id >> password >> age >> gender
                  >> race >> education >> job
                  >> voted >> candidate >> policy)
             {
@@ -379,15 +382,20 @@ int main()
         }
         else
         {
-            cout << "Storage error." << endl;
-            exit(1);
+            cout << "Unable to open and read from data file." << endl
+                 << "Please make sure the file is in the project.";
+            while (1);
         }
 
         r.close();
 
-        generalResults();
-        candidateResults();
+        if (generalResults())
+            candidateResults();
+
+        counting = false;
     }
+
+    while (1);
 
     return 0;
 }
