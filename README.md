@@ -12,4 +12,4 @@ Voter database decryption, tallying votes and publishing election results and st
 
 ## encryption
 
-CryptoPP: https://github.com/weidai11/cryptopp
+[CryptoPP](https://github.com/weidai11/cryptopp)
