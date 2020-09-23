@@ -9,3 +9,7 @@ Voter authentication, casting votes and vote encryption and storage into the dat
 
 ## counting
 Voter database decryption, tallying votes and publishing election results and statistics.
+
+## encryption
+
+CryptoPP: https://github.com/weidai11/cryptopp
