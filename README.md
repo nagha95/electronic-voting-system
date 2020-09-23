@@ -12,4 +12,4 @@ Voter database, tallying votes and publishing election results and statistics.
 
 ## encryption
 
-* [Crypto++](https://github.com/weidai11/cryptopp)
+* [Crypto++](https://github.com/weidai11/cryptopp) (AES-256)
