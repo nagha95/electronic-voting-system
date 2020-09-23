@@ -63,7 +63,7 @@ int main()
             e = rand() % 3;
             j = rand() % 3;
             
-            f << 11000 + i << " "
+            f << to_string(11000 + i) << " "
               << pass << " "
               << age << " "
               << gender[g] << " "

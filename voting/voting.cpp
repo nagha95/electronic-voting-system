@@ -288,6 +288,8 @@ int main()
         print(voter);   
     }
 
+    voting = false;
+
     cout << "Voting is closed." << endl;
 
     return 0;

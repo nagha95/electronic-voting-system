@@ -205,7 +205,7 @@ int main()
 {
     counting = true;
 
-    while(counting)
+    while (counting)
     {
         ifstream r;             
 

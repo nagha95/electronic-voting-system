@@ -13,7 +13,7 @@ class Voter
     string race;        //voter race
     string education;   //voter education
     string job;         //voter job
-    string voted;         //vote status
+    string voted;       //vote status
     string candidate;   //candidate choice 
     string policy;      //most important policy
     
